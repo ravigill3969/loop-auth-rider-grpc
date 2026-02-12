@@ -38,6 +38,7 @@ func (p *PaymentService) CreateCheckoutSessionHandler(w http.ResponseWriter, r *
 	}
 
 	rider_id, ok := r.Context().Value(middleware.RiderIDKey).(string)
+
 	if !ok {
 		respondWithError(w, http.StatusUnauthorized, "Unauthorized", "Please login to perform this action.")
 	}

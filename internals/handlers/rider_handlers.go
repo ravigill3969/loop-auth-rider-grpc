@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -153,6 +154,8 @@ func (a *AuthService) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	grpcResp, err := a.authClient.Login(context.Background(), grpcReq)
+	fmt.Println(err)
+
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Failed to login", err.Error())
 		return
@@ -252,11 +255,9 @@ func (a *AuthService) GetRiderDetailsHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	// Create context with authorization metadata for gRPC
 	ctx := context.Background()
 	ctx = metadata.AppendToOutgoingContext(ctx, "authorization", authHeader)
 
-	// Call gRPC service (ID will come from the token context)
 	grpcReq := &pb.GetRiderDetailsRequest{
 		Id: "", // Not used anymore, comes from auth context
 	}
